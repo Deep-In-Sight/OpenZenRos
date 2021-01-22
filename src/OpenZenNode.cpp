@@ -29,14 +29,13 @@
 class OpenZenSensor : public rclcpp::Node
 {
 public:
-
-
     // Parameters
     std::string m_sensorName;
     std::string m_sensorInterface;
     std::string frame_id;
     std::string frame_id_gnss;
     int m_baudrate = 0;
+    bool m_configureGnssOutput = true;
 
     OpenZenSensor() : Node("openzen_sensor_node"),
             m_sensorThread( [&](SensorThreadParams const& param) -> bool {
@@ -117,7 +116,6 @@ public:
                 if (event->eventType == ZenEventType_GnssData) {
                     // Global navigation satellite system
                     auto const& d = event->data.gnssData;
-
                     sensor_msgs::msg::NavSatFix nav_msg;
                     sensor_msgs::msg::NavSatStatus nav_status;
                     nav_status.status = sensor_msgs::msg::NavSatStatus::STATUS_NO_FIX;
@@ -174,6 +172,7 @@ public:
         m_openzenVerbose = this->declare_parameter<bool>("openzen_verbose", false);
         // using 0 as default will tell OpenZen to use the defaul baudrate for a respective sensor
         m_baudrate = this->declare_parameter<int>("baudrate", 0);
+        m_configureGnssOutput = this->declare_parameter<int>("configure_gnss_output", true);
 
         // In LP-Research sensor output, the linear acceleration measurement is pointing down (z-) when
         // the sensor is lying flat on the table. ROS convention is z+ pointing up in this case
@@ -325,6 +324,12 @@ public:
             zen_imu_component.handle = 1;
         }
 
+        const auto lmdEnableOutput = [this](auto & component, auto property) {
+            if (component->setBoolProperty(property, true) != ZenError_None) {
+                RCLCPP_ERROR_STREAM(get_logger(), "Cannot enable output of value " << property << " on sensor");
+            }
+        };
+
         auto imu_component = m_zenSensor->getAnyComponentOfType(g_zenSensorType_Imu);
         if (!imu_component.has_value())
         {
@@ -334,7 +339,11 @@ public:
             RCLCPP_INFO(get_logger(),"IMU component found");
             m_zenImu = std::unique_ptr<zen::ZenSensorComponent>( new zen::ZenSensorComponent(std::move(imu_component.value())));
             zen_imu_component = m_zenImu->component();
-            
+
+            // automatic output flag settings for IMU not done atm because this
+            // depends on the sensor model (legacy protocol or IG1 which output fields)
+            // need to be enable and this is not exposed by OpenZen at the moment
+
             publishIsAutocalibrationActive();
         }
 
@@ -347,6 +356,19 @@ public:
             RCLCPP_INFO(get_logger(), "GNSS component found");
             m_zenGnss = std::unique_ptr<zen::ZenSensorComponent>( new zen::ZenSensorComponent(std::move(gnss_component.value())));
             zen_gnss_component = m_zenGnss->component();
+
+            if (m_configureGnssOutput) {
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtFixType);
+                // used to read the RTK GPS state
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtFlags);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtNumSV);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtLongitude);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtLatitude);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtHeight);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvthMSL);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvthAcc);
+                lmdEnableOutput(m_zenGnss, ZenGnssProperty_OutputNavPvtvAcc);
+            }
             // set up a publisher for Gnss
             m_nav_pub = this->create_publisher<sensor_msgs::msg::NavSatFix>("nav",1);
         }
