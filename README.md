@@ -77,3 +77,15 @@ We have prepared a sample launch file openzen_lpms.launch to demonstrate data ac
 ```
 ros2 launch openzen_sensor openzen_lpms_ig1.launch
 ```
+
+To change to autocalibration setting via the command line:
+
+```
+ros2 service call /enable_gyro_autocalibration std_srvs/SetBool "{data: true}"
+```
+
+To trigger an gyroscope calibration:
+
+```
+ros2 service call /calibrate_gyroscope std_srvs/Trigger
+```
