@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>openzen_sensor</name>
+  <name>openzen_driver</name>
   <version>1.2.0</version>
-  <description>ROS 2 driver for LP-Research inertial measurement units and satellite navigation senors</description>
+  <description>ROS 2 Driver for LP-Research inertial measurement units and satellite navigation senors</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <maintainer email="thomas@lp-research.com">Thomas Hauth</maintainer>
