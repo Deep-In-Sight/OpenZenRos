@@ -4,9 +4,9 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
-            package='openzen_sensor',
+            package='openzen_driver',
             namespace='openzen',
-            executable='openzen_sensor_node',
+            executable='openzen_node',
             name='lpms_node'
         ),
 
