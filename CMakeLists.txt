@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(openzen_sensor)
+project(openzen_driver)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -72,29 +72,21 @@ else()
 endif()
 
 ## Build 
-add_executable(openzen_sensor_node
+add_executable(openzen_node
   src/OpenZenNode.cpp
 )
 
-target_link_libraries(openzen_sensor_node
-  ${OPENZEN_TARGET_NAME}
+target_link_libraries(openzen_node
+  OpenZen
 )
 
-ament_target_dependencies(openzen_sensor_node
+ament_target_dependencies(openzen_node
   rclcpp
   std_msgs
   std_srvs
   sensor_msgs)
 
-## install node binary
-#install(TARGETS openzen_sensor_node
-#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#)
-
-# todo: some binaries to install ?
-install(TARGETS openzen_sensor_node
+install(TARGETS openzen_node
   DESTINATION lib/${PROJECT_NAME})
 
 #ament_export_dependencies(std_msgs sensor_msgs)

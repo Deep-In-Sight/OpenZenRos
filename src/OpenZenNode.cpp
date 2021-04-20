@@ -37,7 +37,7 @@ public:
     int m_baudrate = 0;
     bool m_configureGnssOutput = true;
 
-    OpenZenSensor() : Node("openzen_sensor_node"),
+    OpenZenSensor() : Node("openzen_node"),
             m_sensorThread( [&](SensorThreadParams const& param) -> bool {
 
             const float cDegToRad = 3.1415926f/180.0f;
