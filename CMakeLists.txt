@@ -36,6 +36,8 @@ ament_target_dependencies(openzen_node
 
 install(TARGETS openzen_node
   DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}/)
 
 if (BUILD_TESTING)
   # launch_test is documented here:
