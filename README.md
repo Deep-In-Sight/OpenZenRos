@@ -1,5 +1,3 @@
-## For user working with any sensors except for [LPMS2 sensors](https://lp-research.atlassian.net/wiki/spaces/LKB/pages/1103790206/LPMS2+Series+Documentation), please go to `feature/LPMS3_support` branch.
-
 # OpenZen Node for ROS
 
 This software allows to forward sensor data from sensor connected via OpenZen to ROS.
@@ -53,10 +51,6 @@ mkdir -p catskin_ws/src
 cd catskin_ws/src
 
 git clone --recurse-submodules https://bitbucket.org/lpresearch/openzenros.git
-
-# make sure both OpenZenROS and its OpenZen dependency are on the correct branch / commit
-cd openzenros && git checkout feature/LPMS3_support
-cd openzen && git checkout 7218b010593616045a52a95a9f79465a404738f6
 
 # get your ROS environment going
 source /opt/ros/melodic/setup.bash
