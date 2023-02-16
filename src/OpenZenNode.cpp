@@ -340,11 +340,14 @@ public:
 
                 // BE series
                 {"LPMS-BE1", Gyro2AsDefault}, {"LPMS-BE2", Gyro2AsDefault}, 
-
-                // match every other legacy sensor
-                {"*", Gyro1AsDefault}
             };
-            m_defaultGyroIdx = mapDeviceToDefaultGyro[deviceName];
+            
+            auto it = mapDeviceToDefaultGyro.find(deviceName);
+            if (it != mapDeviceToDefaultGyro.end()) 
+                m_defaultGyroIdx = it->second;
+            else
+                // match every other legacy sensor
+                m_defaultGyroIdx = Gyro1AsDefault;
         }
     }
 
