@@ -88,9 +88,11 @@ public:
 
                     // Fill angular velocity data
                     // - scale from deg/s to rad/s
-                    imu_msg.angular_velocity.x = d.g[0] * cDegToRad;
-                    imu_msg.angular_velocity.y = d.g[1] * cDegToRad;
-                    imu_msg.angular_velocity.z = d.g[2] * cDegToRad;
+                    // - please check OpenZen docs for difference between gyro1 (high precision) and gyro2 (general purpose)
+                    // https://lp-research.atlassian.net/wiki/spaces/LKB/pages/2005630977/OpenZen+Documentations#Keys-for-Sensor-Data-Access
+                    imu_msg.angular_velocity.x = d.g2[0] * cDegToRad;
+                    imu_msg.angular_velocity.y = d.g2[1] * cDegToRad;
+                    imu_msg.angular_velocity.z = d.g2[2] * cDegToRad;
 
                     // Fill linear acceleration data
                     const float rosConversion = -1.0 * (!param.useLpmsAccelerationConvention) +
