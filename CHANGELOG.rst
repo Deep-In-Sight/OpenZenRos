@@ -2,6 +2,18 @@
 Changelog for package openzen_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.2 (2023-08-29)
+------------------
+* fix default gyro mapping for legacy sensor
+  tested with URS2
+* update ros package version to v1.3.1
+* update submodule openzen to v1.3.1 to support LPMS3 sensors
+* switch default gyros for different sensors
+* updated OpenZen to be able to parse 16-bit data format messages for IG1
+* updated to recent OpenZen to be able to directly connect to Linux device files
+* turn on ZEN_USE_STATIC_LIBS for OpenZen build
+* Contributors: LP-Research Inc. Team
+
 1.2.0 (2020-11-17)
 ------------------
 * fixed conditions check for build or download OpenZen options
