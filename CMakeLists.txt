@@ -29,6 +29,7 @@ if (NOT BUILD_OPENZEN AND NOT OPENZEN_ROS_BINARY_DOWNLOAD)
 endif()
 
 if (BUILD_OPENZEN)
+  SET(ZEN_USE_STATIC_LIBS ON CACHE BOOL "Whether to compile OpenZen as a static library")
   SET(ZEN_BLUETOOTH OFF CACHE BOOL "Don't build bluetooth")
   SET(ZEN_TESTS OFF CACHE BOOL "Don't build tests")
   SET(ZEN_EXAMPLES OFF CACHE BOOL "Don't build examples")
