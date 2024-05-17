@@ -45,14 +45,14 @@ By default, it will connect to the first available sensor. If you want to connec
 a specific sensor, you can use the serial name of the sensor as parameter, for example:
 
 ```
-ros2 run openzen_driver openzen_node -r __ns:=/openzen/ --ros-args --remap __ns:=/openzen -p sensor_name:="LPMSCU2000573"
+ros2 run openzen_driver openzen_node --ros-args --remap __ns:=/openzen -p sensor_name:="LPMSCU2000573"
 ```
 
 If your sensor is configured for a different baud rate, you can use the baudrate parameter to
 give a specfic baud rate setting:
 
 ```
-ros2 run openzen_driver openzen_node -r __ns:=/openzen/ --ros-args --remap __ns:=/openzen -p sensor_name:="LPMSCU2000573" -p baudrate:=115200
+ros2 run openzen_driver openzen_node --ros-args --remap __ns:=/openzen -p sensor_name:="LPMSCU2000573" -p baudrate:=115200
 ```
 
 Now you can print the IMU values from ROS with:
@@ -75,7 +75,7 @@ ros2 run rqt_plot rqt_plot /openzen/data/angular_velocity
 
 We have prepared a sample launch file openzen_lpms.launch to demonstrate data acquisition and plotting using openzen_sensor_node:
 ```
-ros2 launch openzen_sensor openzen_lpms_ig1.launch
+ros2 launch openzen_driver openzen_lpms.launch.py
 ```
 
 To change to autocalibration setting via the command line:
