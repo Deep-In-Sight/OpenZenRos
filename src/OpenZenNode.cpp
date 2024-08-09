@@ -98,10 +98,22 @@ public:
                     imu_msg.header.frame_id = param.frame_id;
 
                     // Fill orientation quaternion
-                    imu_msg.orientation.w = d.q[0];
-                    imu_msg.orientation.x = -d.q[1];
-                    imu_msg.orientation.y = -d.q[2];
-                    imu_msg.orientation.z = -d.q[3];
+                    switch (m_defaultConjugateIdx)
+                    {
+                        case QuatNeedConjugate:
+                            imu_msg.orientation.w = d.q[0];
+                            imu_msg.orientation.x = -d.q[1];
+                            imu_msg.orientation.y = -d.q[2];
+                            imu_msg.orientation.z = -d.q[3];
+                            break;
+                        
+                        case QuatNoNeedConjugate:
+                            imu_msg.orientation.w = d.q[0];
+                            imu_msg.orientation.x = d.q[1];
+                            imu_msg.orientation.y = d.q[2];
+                            imu_msg.orientation.z = d.q[3];
+                            break;
+                    }
 
                     // Fill angular velocity data
                     // - scale from deg/s to rad/s
@@ -348,6 +360,34 @@ public:
             else
                 // match every other legacy sensor
                 m_defaultGyroIdx = Gyro1AsDefault;
+
+            
+            std::map<std::string, DefaultConjugate> mapDeviceToDefaultConjugate = {
+                // NAV series
+                {"LPMS-NAV3-CAN", QuatNoNeedConjugate}, {"LPMS-NAV3-RS232", QuatNoNeedConjugate}, {"LPMS-NAV3-RS485", QuatNoNeedConjugate}, {"LPMS-NAV3-TTL", QuatNoNeedConjugate},
+
+                // CURS and AL series share the same names
+                {"LPMS-CURS3-TTL", QuatNoNeedConjugate}, {"LPMS-CURS3-RS232", QuatNoNeedConjugate}, {"LPMS-CURS3-CAN", QuatNoNeedConjugate}, {"LPMS-SI2-USB", QuatNoNeedConjugate}, {"LPMS-SI2-RS232", QuatNoNeedConjugate},
+
+                // U series
+                {"LPMS-CU3", QuatNoNeedConjugate}, {"LPMS-URS3", QuatNoNeedConjugate}, {"LPMS-UTTL3", QuatNoNeedConjugate},
+
+                // IG1 series
+                {"LPMS-IG1-CAN", QuatNeedConjugate}, {"LPMS-IG1-RS232", QuatNeedConjugate}, {"LPMS-IG1-RS485", QuatNeedConjugate}, {"LPMS-IG1W", QuatNeedConjugate}, {"LPMS-IG1-CANOPEN", QuatNeedConjugate},
+
+                // IG1 (with GPS)
+                {"LPMS-IG1P-CAN", QuatNeedConjugate}, {"LPMS-IG1P-RS232", QuatNeedConjugate}, {"LPMS-IG1P-RS485", QuatNeedConjugate}
+
+                // BE series
+                {"LPMS-BE1", QuatNeedConjugate}, {"LPMS-BE2", QuatNeedConjugate}, 
+            };
+
+            auto its = mapDeviceToDefaultConjugate.find(deviceName);
+            if (its != mapDeviceToDefaultConjugate.end()) 
+                m_defaultConjugateIdx = its->second;
+            else
+                // match every other legacy sensor
+                m_defaultConjugateIdx = QuatNeedConjugate;
         }
     }
 
@@ -559,7 +599,13 @@ public:
         Gyro2AsDefault
     };
 
+    enum DefaultConjugate{
+        QuatNeedConjugate = 1,
+        QuatNoNeedConjugate
+    };
+
     DefaultGyro m_defaultGyroIdx;
+    DefaultConjugate m_defaultConjugateIdx;
 
     ManagedThread<SensorThreadParams> m_sensorThread;
 };
