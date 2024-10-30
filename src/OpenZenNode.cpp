@@ -203,11 +203,11 @@ public:
         })
     {
         // Get node parameters
-        private_nh.param<std::string>("sensor_name", m_sensorName, "");
+        private_nh.param<std::string>("sensor_name", m_sensorName, "devicefile:/dev/ttyUSB0");
         private_nh.param<std::string>("sensor_interface", m_sensorInterface, "LinuxDevice");
         private_nh.param<bool>("openzen_verbose", m_openzenVerbose, false);
         // using 0 as default will tell OpenZen to use the defaul baudrate for a respective sensor
-        private_nh.param("baudrate", m_baudrate, 0);
+        private_nh.param("baudrate", m_baudrate, 921600);
 
         // In LP-Research sensor output, the linear acceleration measurement is pointing down (z-) when
         // the sensor is lying flat on the table. ROS convention is z+ pointing up in this case
