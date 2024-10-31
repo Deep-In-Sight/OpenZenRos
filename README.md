@@ -19,7 +19,7 @@ sudo adduser <username> dialout
 
 ## Compilation
 
-To compile this driver in your ROS2 setup, follow these steps:
+To compile this driver in your ROS2 Foxy setup, follow these steps:
 ```
 mkdir -p ros_ws/src
 cd ros_ws/src
@@ -32,6 +32,20 @@ cd ..
 colcon build
 source ./install/setup.bash
 ```
+If you failed build at openzen-external-spdlog follow: ex) ROS2 humble
+```
+mkdir -p ros_ws/src
+cd ros_ws/src
+
+git clone --recurse-submodules https://bitbucket.org/lpresearch/openzenros2.git
+
+cd openzenros2/openzen && mkdir build && cd build
+cmake .. && make -j4 && sudo make install
+
+
+echo export LD_LIBRARY_PATH=/ros_ws/src/openzenros2/openzen/build:$LD_LIBRARY_PATH >> ../../../install/setup.bash
+```
+
 ## Running the Driver
 
 You can now run the OpenZen ROS2 driver with this command in the window

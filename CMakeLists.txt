@@ -17,13 +17,17 @@ SET(ZEN_BLUETOOTH OFF CACHE BOOL "Don't build bluetooth")
 SET(ZEN_TESTS OFF CACHE BOOL "Don't build tests")
 SET(ZEN_EXAMPLES OFF CACHE BOOL "Don't build examples")
 SET(ZEN_USE_BINARY_LIBRARIES ${OPENZEN_ROS_BINARY_LIBRARIES} CACHE BOOL "Don't download binary dependencies (windows only)")
-add_subdirectory(openzen)
+
+
+if($ENV{ROS_DISTRO} STREQUAL "foxy")
+  add_subdirectory(openzen)
+endif()
+
 
 ## Build 
 add_executable(openzen_node
   src/OpenZenNode.cpp
 )
-
 target_link_libraries(openzen_node
   OpenZen
 )

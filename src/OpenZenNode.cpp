@@ -82,9 +82,9 @@ public:
 
                     // Fill orientation quaternion
                     imu_msg.orientation.w = d.q[0];
-                    imu_msg.orientation.x = -d.q[1];
-                    imu_msg.orientation.y = -d.q[2];
-                    imu_msg.orientation.z = -d.q[3];
+                    imu_msg.orientation.x = d.q[1];
+                    imu_msg.orientation.y = d.q[2];
+                    imu_msg.orientation.z = d.q[3];
 
                     // Fill angular velocity data
                     // - scale from deg/s to rad/s
