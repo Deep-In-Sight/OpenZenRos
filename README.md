@@ -1,3 +1,32 @@
+# Difference usage of this branch
+
+If you failed build at openzen-external-spdlog follow: ex) ROS2 humble
+```
+mkdir -p ros_ws/src
+cd ros_ws/src
+
+git clone --recurse-submodules https://github.com/Deep-In-Sight/OpenZenRos.git
+
+cd openzenros2/openzen && mkdir build && cd build
+cmake .. && make -j4 && sudo make install
+
+
+echo export LD_LIBRARY_PATH=/ros_ws/src/openzenros2/openzen/build:$LD_LIBRARY_PATH >> ../../../install/setup.bash
+```
+## Save Covariance Matrix and Publish Data
+Save 3x3 covariance matrix to below file
+
+```
+/ros_ws/covariance_matrix.txt
+```
+each covariance is 3x3 table and it is publishing through ROS2 sensor_msgs/msg/imu_Message
+| | covariance_matrix | |
+|---------------|---------------|---------------|
+| orientation_covariance[0] | orientation_covariance[4]  | orientation_covariance[8]  |
+| angular_velocity_covariance[0]  | angular_velocity_covariance[4]  | angular_velocity_covariance[8]  |
+| linear_acceleration_covariance[0]  | linear_acceleration_covariance[4]  | linear_acceleration_covariance[8]  |
+
+
 # OpenZen Node for ROS 2
 
 This software allows to forward sensor data from sensor connected via OpenZen to ROS version 2.
@@ -32,19 +61,7 @@ cd ..
 colcon build
 source ./install/setup.bash
 ```
-If you failed build at openzen-external-spdlog follow: ex) ROS2 humble
-```
-mkdir -p ros_ws/src
-cd ros_ws/src
 
-git clone --recurse-submodules https://bitbucket.org/lpresearch/openzenros2.git
-
-cd openzenros2/openzen && mkdir build && cd build
-cmake .. && make -j4 && sudo make install
-
-
-echo export LD_LIBRARY_PATH=/ros_ws/src/openzenros2/openzen/build:$LD_LIBRARY_PATH >> ../../../install/setup.bash
-```
 
 ## Running the Driver
 

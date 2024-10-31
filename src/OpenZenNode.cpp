@@ -25,6 +25,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 class OpenZenSensor : public rclcpp::Node
 {
@@ -109,6 +110,16 @@ public:
                     mag_msg.magnetic_field.x = d.b[0] * cMicroToTelsa;
                     mag_msg.magnetic_field.y = d.b[1] * cMicroToTelsa;
                     mag_msg.magnetic_field.z = d.b[2] * cMicroToTelsa;
+
+                    imu_msg.orientation_covariance[0] = orientation_covariance[0];
+                    imu_msg.orientation_covariance[4] = orientation_covariance[1];
+                    imu_msg.orientation_covariance[8] = orientation_covariance[2];
+                    imu_msg.angular_velocity_covariance[0] = angular_velocity_covariance[0];
+                    imu_msg.angular_velocity_covariance[4] = angular_velocity_covariance[1];
+                    imu_msg.angular_velocity_covariance[8] = angular_velocity_covariance[2];
+                    imu_msg.linear_acceleration_covariance[0] = linear_acceleration_covariance[0];
+                    imu_msg.linear_acceleration_covariance[4] = linear_acceleration_covariance[1];
+                    imu_msg.linear_acceleration_covariance[8] = linear_acceleration_covariance[2];
 
                     // Publish the messages
                     param.imu_pub->publish(imu_msg);
@@ -302,6 +313,8 @@ public:
       if (!startStreaming()) {
           RCLCPP_ERROR(get_logger(), "Cannot start sensor data streaming");
       }
+
+      read_covariance_matrix("/ros_ws/covariance_matrix.txt", covarianceMatrix);
     }
 
   bool startStreaming() {
@@ -531,6 +544,38 @@ public:
 
     bool m_openzenVerbose;
     bool m_useLpmsAccelerationConvention;
+
+    double covarianceMatrix[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+    double* orientation_covariance = &covarianceMatrix[0][0];
+    double* angular_velocity_covariance = &covarianceMatrix[1][0];
+    double* linear_acceleration_covariance = &covarianceMatrix[2][0];
+
+
+    void read_covariance_matrix(const std::string& filename, double (&covariance)[3][3])
+    {
+        std::ifstream file(filename);
+        if(!file.is_open())
+        {
+            RCLCPP_ERROR(get_logger(), "Cannot open covariance matrix file");
+            // return;
+        }
+            
+        for (int i = 0; i < 3; ++i) 
+        {
+            for (int j = 0; j < 3; ++j) 
+            {
+                if (!(file >> covariance[i][j])) 
+                {
+                    RCLCPP_ERROR(get_logger(), "Error reading covariance matrix element");
+                    
+                    return;
+                }
+            }
+        }
+
+        file.close();
+        return;
+    }
 
     struct SensorThreadParams
     {
