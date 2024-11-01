@@ -557,19 +557,33 @@ public:
         if(!file.is_open())
         {
             RCLCPP_ERROR(get_logger(), "Cannot open covariance matrix file");
-            // return;
+            return;
         }
             
+        std::string line;
+        std::vector<double> values;
+        while (std::getline(file, line)) 
+        {
+            std::istringstream iss(line);
+            double value;
+            while (iss >> value) 
+            {
+                values.push_back(value);
+            }
+        }
+
+        if (values.size() != 27) 
+        {
+            std::cerr << "Unexpected number of values in file" << std::endl;
+            return;
+        }
+
+        int index = 0;
         for (int i = 0; i < 3; ++i) 
         {
             for (int j = 0; j < 3; ++j) 
             {
-                if (!(file >> covariance[i][j])) 
-                {
-                    RCLCPP_ERROR(get_logger(), "Error reading covariance matrix element");
-                    
-                    return;
-                }
+                covariance[i][j] = values[index++];
             }
         }
 
