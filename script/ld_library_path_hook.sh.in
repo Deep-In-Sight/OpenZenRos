@@ -1,0 +1,2 @@
+# cmake/ld_library_path_hook.sh.in
+export LD_LIBRARY_PATH="@CMAKE_SOURCE_DIR@/openzen/build:$LD_LIBRARY_PATH"

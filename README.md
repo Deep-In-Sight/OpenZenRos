@@ -1,6 +1,10 @@
 # Difference usage of this branch
 
 If you failed build at openzen-external-spdlog follow: ex) ROS2 humble
+
+build and make install the openzen first, and colcon build openzenros2 later.
+
+If you command source install/setup.bash, openzen path will be automatically added to LD_LIBRARY_PATH
 ```
 mkdir -p ros_ws/src
 cd ros_ws/src
@@ -9,9 +13,6 @@ git clone --recurse-submodules https://github.com/Deep-In-Sight/OpenZenRos.git
 
 cd openzenros2/openzen && mkdir build && cd build
 cmake .. && make -j4 && sudo make install
-
-
-echo export LD_LIBRARY_PATH=/ros_ws/src/openzenros2/openzen/build:$LD_LIBRARY_PATH >> ../../../install/setup.bash
 ```
 ## Save Covariance Matrix and Publish Data
 Save 3x3 covariance matrix to below file

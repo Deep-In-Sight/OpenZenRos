@@ -50,4 +50,12 @@ if (BUILD_TESTING)
   add_launch_test(test/openzen_test.launch.py)
 endif()
 
+install(
+  DIRECTORY script
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/script/ld_library_path_hook.sh.in")
+
 ament_package()
+
