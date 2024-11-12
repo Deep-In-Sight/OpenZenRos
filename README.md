@@ -11,7 +11,7 @@ cd ros_ws/src
 
 git clone --recurse-submodules https://github.com/Deep-In-Sight/OpenZenRos.git
 
-cd openzenros2/openzen && mkdir build && cd build
+cd OpenZenRos/openzen && mkdir build && cd build
 cmake .. && make -j4 && sudo make install
 ```
 ## Save Covariance Matrix and Publish Data
