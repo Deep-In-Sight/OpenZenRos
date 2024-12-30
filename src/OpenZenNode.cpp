@@ -331,7 +331,10 @@ public:
         }
 
         {
-            std::string deviceName = m_zenSensor->deviceName();
+            //std::string deviceName = m_zenSensor->deviceName();
+            //ROS_INFO_STREAM("Sensor name is " << deviceName);
+
+            std::string deviceName = "OpenZenSensor_" + m_sensorName;
             ROS_INFO_STREAM("Sensor name is " << deviceName);
             
             std::map<std::string, DefaultGyro> mapDeviceToDefaultGyro = {
