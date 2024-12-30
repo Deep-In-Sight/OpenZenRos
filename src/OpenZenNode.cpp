@@ -119,14 +119,14 @@ public:
                     // - scale from deg/s to rad/s
                     switch (m_defaultGyroIdx) {
                         case Gyro1AsDefault:
-                            imu_msg.angular_velocity.x = d.g1[0] * cDegToRad;
-                            imu_msg.angular_velocity.y = d.g1[1] * cDegToRad;
-                            imu_msg.angular_velocity.z = d.g1[2] * cDegToRad;
+                            imu_msg.angular_velocity.x = d.g[0] * cDegToRad;
+                            imu_msg.angular_velocity.y = d.g[1] * cDegToRad;
+                            imu_msg.angular_velocity.z = d.g[2] * cDegToRad;
                             break;
                         case Gyro2AsDefault:
-                            imu_msg.angular_velocity.x = d.g2[0] * cDegToRad;
-                            imu_msg.angular_velocity.y = d.g2[1] * cDegToRad;
-                            imu_msg.angular_velocity.z = d.g2[2] * cDegToRad;
+                            imu_msg.angular_velocity.x = d.g[0] * cDegToRad;
+                            imu_msg.angular_velocity.y = d.g[1] * cDegToRad;
+                            imu_msg.angular_velocity.z = d.g[2] * cDegToRad;
                             break;
                     }
 
