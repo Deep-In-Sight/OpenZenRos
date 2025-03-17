@@ -68,6 +68,9 @@ source ./install/setup.bash
 
 You can now run the OpenZen ROS2 driver with this command in the window
 you used to compile the software:
+```
+ros2 launch openzen_driver openzen_lpms.launch.py
+```
 
 ```
 ros2 run openzen_driver openzen_node --ros-args --remap __ns:=/openzen
@@ -121,3 +124,12 @@ To trigger an gyroscope calibration:
 ```
 ros2 service call /calibrate_gyroscope std_srvs/Trigger
 ```
+
+## Sampling rate
+
+You can set the sampling rate to 5, 10, 50, 100, 250, or 500 using the following command:
+```
+ros2 run openzen_driver openzen_node --ros-args --remap __ns:=/openzen -p samplingrate:=500
+```
+
+

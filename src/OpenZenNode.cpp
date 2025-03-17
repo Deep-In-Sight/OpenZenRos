@@ -36,6 +36,7 @@ public:
     std::string frame_id;
     std::string frame_id_gnss;
     int m_baudrate = 0;
+    int m_samplingrate = 0;
     bool m_configureGnssOutput = true;
 
     OpenZenSensor() : Node("openzen_node"),
@@ -185,6 +186,7 @@ public:
         m_openzenVerbose = this->declare_parameter<bool>("openzen_verbose", false);
         // using 0 as default will tell OpenZen to use the defaul baudrate for a respective sensor
         m_baudrate = this->declare_parameter<int>("baudrate", 0);
+        m_samplingrate = this->declare_parameter<int>("samplingrate", 0);
         m_configureGnssOutput = this->declare_parameter<int>("configure_gnss_output", true);
 
         // In LP-Research sensor output, the linear acceleration measurement is pointing down (z-) when
@@ -360,6 +362,9 @@ public:
             // need to be enable and this is not exposed by OpenZen at the moment
 
             publishIsAutocalibrationActive();
+            if(m_samplingrate > 0) {
+                bool result = set_samplingrate(m_samplingrate);
+            }
         }
 
         auto gnss_component = m_zenSensor->getAnyComponentOfType(g_zenSensorType_Gnss);
@@ -589,6 +594,47 @@ public:
 
         file.close();
         return;
+    }
+
+    bool set_samplingrate(int rate)
+    {
+        if (!m_zenImu) {
+            RCLCPP_INFO(get_logger(),"No IMU compontent available, can't set sampling rate");
+            return false;
+        }
+
+        switch (rate)
+        {
+            case 5:
+                break;
+            case 10:
+                break;
+            case 50:
+                break;
+            case 100:
+                break;
+            case 250:
+                break;
+            case 500:
+                break;
+            default:
+                RCLCPP_ERROR(get_logger(),"Invalid sampling rate");
+                return false;
+        }
+        RCLCPP_INFO_STREAM(get_logger(), "Setting sampling rate to " << rate << "Hz");
+
+        if (auto error = m_zenImu->setInt32Property(ZenImuProperty_SamplingRate, rate))
+        {
+            RCLCPP_ERROR(get_logger(),"Error while setting sampling rate");
+            std::cout << "Error while setting sampling rate" << std::endl;
+        } 
+        else 
+        {
+            RCLCPP_INFO_STREAM(get_logger(), "Sampling rate set to " << rate << "Hz");
+            std::cout << "Sampling rate set to " << rate << "Hz" << std::endl;
+        }
+
+        return true;
     }
 
     struct SensorThreadParams
